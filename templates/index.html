@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="bg-light p-4 rounded shadow-sm">
+            <h1 class="display-4 mb-3">ブログ記事一覧</h1>
+            <p class="lead">最新の記事をチェックしよう</p>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    {% for post in posts %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            {% if post.img_name %}
+            <img src="{{ url_for('static', filename='img/' + post.img_name) }}" class="card-img-top" alt="記事の画像">
+            {% else %}
+            <div class="card-img-top bg-light d-flex align-items-center justify-content-center">
+                <i class="fas fa-image fa-3x text-secondary"></i>
+            </div>
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ post.title }}</h5>
+                <p class="post-date mb-2"><i class="far fa-calendar-alt"></i> {{ post.created_at.strftime('%Y年%m月%d日') }}</p>
+                <p class="card-text">{{ post.body|truncate(100) }}</p>
+            </div>
+            <div class="card-footer bg-white border-top-0">
+                <a href="/post/{{ post.id }}" class="btn btn-primary">続きを読む <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% if not posts %}
+<div class="alert alert-info mt-4 text-center" role="alert">
+    <i class="fas fa-info-circle fa-lg me-2"></i> 記事がありません。
+</div>
+{% endif %}
+{% endblock %} 

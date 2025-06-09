@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="mb-0">記事管理</h1>
+            <a href="/create" class="btn btn-success">
+                <i class="fas fa-plus-circle"></i> 新規登録
+            </a>
+        </div>
+        <hr>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="table-responsive">
+            <table class="table table-hover border">
+                <thead class="table-light">
+                    <tr>
+                        <th>画像</th>
+                        <th>タイトル</th>
+                        <th>内容</th>
+                        <th>投稿日時</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for post in posts %}
+                    <tr>
+                        <td style="width: 100px;">
+                            {% if post.img_name %}
+                            <img src="{{ url_for('static', filename='img/' + post.img_name) }}" class="img-thumbnail" alt="記事の画像" style="width: 80px; height: 80px; object-fit: cover;">
+                            {% else %}
+                            <div class="bg-light d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                                <i class="fas fa-image text-secondary"></i>
+                            </div>
+                            {% endif %}
+                        </td>
+                        <td>{{ post.title }}</td>
+                        <td>{{ post.body|truncate(100) }}</td>
+                        <td>{{ post.created_at.strftime('%Y/%m/%d %H:%M') }}</td>
+                        <td>
+                            <div class="btn-group">
+                                <a href="/post/{{ post.id }}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-eye"></i> 表示
+                                </a>
+                                <a href="/{{ post.id }}/update" class="btn btn-sm btn-outline-warning">
+                                    <i class="fas fa-edit"></i> 編集
+                                </a>
+                                <a href="/{{ post.id }}/delete" class="btn btn-sm btn-outline-danger" onclick="return confirm('本当に削除しますか？');">
+                                    <i class="fas fa-trash-alt"></i> 削除
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        {% if not posts %}
+        <div class="alert alert-info text-center mt-4" role="alert">
+            <i class="fas fa-info-circle fa-lg me-2"></i> 記事がありません。新規登録ボタンから記事を作成してください。
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
